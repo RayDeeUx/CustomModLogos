@@ -2,7 +2,7 @@
 
 ***Please think ~~twice~~ at least four times about the custom mod logos you use. Don't do anything with this that you wouldn't want to share with others from families and communities you're a part of.*** *I may not be able to stop you, but I can absolutely be held free of liability if you do something stupid while using this mod.*
 
-*Note: This mod only applies custom logos to mods already installed onto your device, and only in the "Installed" tab when viewing the Geode UI.*
+*Note: This mod only applies custom logos to mods already installed onto your device, and only in the "Installed" tab when viewing the Geode UI. Custom mod logos apply to individual devices ONLY.*
 
 Want to change a Geode mod's logo, but never figured out how without editing the raw Geode mod file itself?
 
