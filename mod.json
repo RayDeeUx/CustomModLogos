@@ -1,0 +1,36 @@
+{
+	"geode": "3.4.0",
+	"gd": {
+		"win": "2.206",
+		"android": "2.206",
+		"mac": "2.206"
+	},
+	"id": "raydeeux.custommodlogos",
+	"name": "CustomModLogos",
+	"version": "v1.0.0",
+	"developer": "RayDeeUx",
+	"description": "Change the logo of any INSTALLED mod to a logo you want. Changes only apply for installed mods on your device only.",
+	"repository": "https://github.com/RayDeeUx/CustomModLogos",
+	"settings": {
+		"enabled": {
+			"name": "Enabled",
+			"description": "Toggles the mod.",
+			"type": "bool",
+			"default": true
+		},
+		"configdir": {
+			"name": "Click me to open the Config Directory!",
+			"desc": "<cy>(Hopefully.)</c>\nThis setting does literally nothing new except being a button that acts as a shortcut to open the config directory for this mod (which is kind of important for using this mod properly, because this is where you will store and edit your custom mod logos), because the legendary developers in the Geode Team themselves forgot to add a shortcut button that would have done this exact same thing, and I have gotten far too many folks (rightfully) asking me to find the config directory when using some of my other mods, and I hate repeating the same things over and over again, and I don't know if the next major update for Geode will also repeat this mistake where HJfod forgets to include a config directory shortcut button, so this setting and this button are here for extra insurance, so please enjoy this extra button, I guess. Anyway, by the time you're finished reading this, your device should be finished with opening the config directory; press \"Aight\" to close this window.",
+			"type": "custom"
+		}
+	},
+	"resources": {
+		"files": [
+			"resources/*.png"
+		]
+	},
+	"links": {
+		"community": "https://discord.gg/WqZBYdBWZW",
+		"homepage": "https://discord.com/channels/822510988409831486/1206371881222144020"
+	}
+}
