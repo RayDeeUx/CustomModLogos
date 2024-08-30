@@ -35,8 +35,8 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          build-config: RelWithDebInfo # comment this out (and the line below!) to Release mode
-          export-pdb: true # [vscode] comment this out (and the line above!) to Release mode
+          # build-config: RelWithDebInfo # comment this out (and the line below!) to Release mode
+          # export-pdb: true # [vscode] comment this out (and the line above!) to Release mode
           # bindings: "RayDeeUx/bindings" # [vscode] comment this out to swap to "geode-sdk/bindings"
           # bindings-ref: "custommodlogos" # comment this out to use default branch
           # sdk: nightly # comment this out to use stable Geode SDK version
