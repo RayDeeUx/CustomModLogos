@@ -23,14 +23,14 @@ class $modify(MyCCSprite, CCSprite) {
 	static CCSprite* create(const char* fileName) {
 		CCSprite* sprite = CCSprite::create(fileName);
 		std::string fileNameStr = fileName;
-		if (!fileNameStr.ends_with(R"(/logo.png)")) { return sprite; }
-		if (!Utils::modEnabled()) { return sprite; }
+		if (!fileNameStr.ends_with(R"(/logo.png)")) return sprite;
+		if (!Utils::modEnabled()) return sprite;
 		std::smatch match;
 		bool regexMatched = std::regex_match(fileNameStr, match, modIDLogoPngRegex);
-		if (!regexMatched) { return sprite; }
-		if (match.empty() || match.size() > 2) { return sprite; }
+		if (!regexMatched) return sprite;
+		if (match.empty() || match.size() > 2) return sprite;
 		std::filesystem::path customLogo = MyCCSprite::generateFilePath(match[1].str());
-		if (auto fooBarFoo = !std::filesystem::exists(customLogo)) { return sprite; }
+		if (auto fooBarFoo = !std::filesystem::exists(customLogo)) return sprite;
 		if (CCSprite* iJustWantAPictureOfAGodDangHotDog = CCSprite::create(customLogo.string().c_str()))
 			return iJustWantAPictureOfAGodDangHotDog;
 		return sprite;
