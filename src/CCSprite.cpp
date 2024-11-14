@@ -8,7 +8,7 @@ using namespace geode::prelude;
 const static std::regex modIDLogoPngRegex = std::regex(R"(^([a-z0-9\-_]+\.[a-z0-9\-_]+)\/logo\.png$)");
 
 $on_mod(Loaded) {
-	Mod::get()->addCustomSetting<MySettingValue>("configdir", "none");
+	Mod::get()->registerCustomSettingType("configdir", &MyButtonSettingV3::parse);
 	std::filesystem::path pngInConfigDir = Mod::get()->getConfigDir() / fmt::format("{}.png", Mod::get()->getID());
 	std::filesystem::path pngInResourcesDir = Mod::get()->getResourcesDir() / fmt::format("{}.png", Mod::get()->getID());
 	if (auto foo = std::filesystem::exists(pngInConfigDir)) return;
