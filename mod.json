@@ -1,13 +1,14 @@
 {
-	"geode": "4.0.0-beta.1",
+	"geode": "4.3.1",
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
-		"mac": "2.2074"
+		"mac": "2.2074",
+		"ios": "2.2074"
 	},
 	"id": "raydeeux.custommodlogos",
 	"name": "CustomModLogos",
-	"version": "v1.0.1",
+	"version": "v1.0.2",
 	"developer": "RayDeeUx",
 	"description": "Change the logo of any INSTALLED mod to a logo you want. Changes only apply for installed mods on your device only.",
 	"repository": "https://github.com/RayDeeUx/CustomModLogos",
