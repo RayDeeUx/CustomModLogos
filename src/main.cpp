@@ -11,6 +11,14 @@ static std::filesystem::path generateFilePath(const std::string& modID) {
 	return Mod::get()->getConfigDir() / fmt::format("{}.png", modID);
 }
 
+static std::string toNormalizedString(const std::filesystem::path& path) {
+	#ifdef GEODE_IS_WINDOWS
+	return geode::utils::string::wideToUtf8(path.wstring());
+	#else
+	return path.string();
+	#endif
+}
+
 $on_mod(Loaded) {
 	(void) Mod::get()->registerCustomSettingType("configdir", &MyButtonSettingV3::parse);
 	std::filesystem::path pngInConfigDir = Mod::get()->getConfigDir() / fmt::format("{}.png", Mod::get()->getID());
@@ -26,10 +34,11 @@ $on_mod(Loaded) {
 
 $execute {
 	new EventListener<EventFilter<ModLogoUIEvent>>(+[](ModLogoUIEvent* event) {
+		if (event->getModID().empty() || event->getModID() == "geode.loader") return ListenerResult::Propagate;
 		log::info("a new ModLogoUIEvent posted, LET'S BEGIN.");
 		if (!Utils::modEnabled() || !event->getSprite() || !event->getMod().has_value()) return ListenerResult::Propagate;
 
-		const std::string& formattedSpriteID = fmt::format("{}-custom-logo"_spr, event->getModID());
+		std::string formattedSpriteID = fmt::format("{}-custom-logo"_spr, event->getModID());
 		log::info("formattedSpriteID: {}", formattedSpriteID);
 		if (event->getSprite()->getChildByID(formattedSpriteID)) {
 			log::info("event->getSprite()->getChildByID(formattedSpriteID) was true, ABORT MISSION");
@@ -37,12 +46,13 @@ $execute {
 		}
 
 		std::filesystem::path customLogoPath = generateFilePath(event->getModID());
+		log::info("customLogoPath: {}", customLogoPath);
 		if (!std::filesystem::exists(customLogoPath)) {
 			log::info("!std::filesystem::exists(customLogoPath) was true, ABORT MISSION");
 			return ListenerResult::Propagate;
 		}
 
-		CCSprite* iJustWantAPictureOfAGodDangHotDog = CCSprite::create(customLogoPath.string().c_str());
+		CCSprite* iJustWantAPictureOfAGodDangHotDog = CCSprite::create(toNormalizedString(customLogoPath).c_str());
 		if (!iJustWantAPictureOfAGodDangHotDog) {
 			log::info("!iJustWantAPictureOfAGodDangHotDog was true, ABORT MISSION");
 			return ListenerResult::Propagate;
