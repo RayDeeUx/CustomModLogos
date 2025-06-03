@@ -13,11 +13,9 @@ project(CustomModLogos VERSION 1.0.0)
 add_library(${PROJECT_NAME} SHARED
         src/Utils.cpp
         src/Utils.hpp
-
         src/Settings.cpp
         src/Settings.hpp
-
-        src/CCSprite.cpp
+        src/main.cpp
     # Add any extra C++ source files here
 )
 
