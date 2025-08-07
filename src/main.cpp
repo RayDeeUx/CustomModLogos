@@ -32,7 +32,7 @@ $on_mod(Loaded) {
 	listenForSettingChanges("logging", [](bool newLogging) { Mod::get()->setLoggingEnabled(newLogging); });
 }
 // apparently this NEEDS to be in an execute thread (at least for v4.4.0)????? --raydeeux
-$execute {
+$on_mod(Loaded) {
 	new EventListener<EventFilter<ModLogoUIEvent>>(+[](ModLogoUIEvent* event) {
 		if (event->getModID().empty() || event->getModID() == "geode.loader") return ListenerResult::Propagate;
 		log::info("a new ModLogoUIEvent posted, LET'S BEGIN.");
