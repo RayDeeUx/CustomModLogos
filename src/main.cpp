@@ -33,42 +33,46 @@ $on_mod(Loaded) {
 }
 // apparently this NEEDS to be in an execute thread (at least for v4.4.0)????? --raydeeux
 $execute {
-	new EventListener<EventFilter<ModLogoUIEvent>>(+[](ModLogoUIEvent* event) {
-		if (event->getModID().empty() || event->getModID() == "geode.loader") return ListenerResult::Propagate;
-		log::info("a new ModLogoUIEvent posted, LET'S BEGIN.");
-		if (!Utils::modEnabled() || !event->getSprite() || !event->getMod().has_value()) return ListenerResult::Propagate;
+	// new EventListener<EventFilter<ModLogoUIEvent>>(+[](ModLogoUIEvent* event) {
+	auto listener = ModLogoUIEvent().listen([](cocos2d::CCNode* sprite, std::string_view modID, std::optional<geode::Mod*> mod) {
+		if (modID || modID == "geode.loader") return;
+		// log::info("a new ModLogoUIEvent posted, LET'S BEGIN.");
+		if (!Utils::modEnabled() || !sprite || !mod.has_value()) return;
 
-		std::string formattedSpriteID = fmt::format("{}-custom-logo"_spr, event->getModID());
-		log::info("formattedSpriteID: {}", formattedSpriteID);
-		if (event->getSprite()->getChildByID(formattedSpriteID)) {
-			log::info("event->getSprite()->getChildByID(formattedSpriteID) was true, ABORT MISSION");
-			return ListenerResult::Propagate;
+		std::string formattedSpriteID = fmt::format("{}-custom-logo"_spr, modID);
+		// log::info("formattedSpriteID: {}", formattedSpriteID);
+		if (sprite->getChildByID(formattedSpriteID)) {
+			// log::info("sprite->getChildByID(formattedSpriteID) was true, ABORT MISSION");
+			return;
 		}
 
-		std::filesystem::path customLogoPath = generateFilePath(event->getModID());
+		std::filesystem::path customLogoPath = generateFilePath(modID);
 		log::info("customLogoPath: {}", customLogoPath);
 		if (!std::filesystem::exists(customLogoPath)) {
-			log::info("!std::filesystem::exists(customLogoPath) was true, ABORT MISSION");
-			return ListenerResult::Propagate;
+			// log::info("!std::filesystem::exists(customLogoPath) was true, ABORT MISSION");
+			return;
 		}
 
 		CCSprite* iJustWantAPictureOfAGodDangHotDog = CCSprite::create(toNormalizedString(customLogoPath).c_str());
 		if (!iJustWantAPictureOfAGodDangHotDog) {
-			log::info("!iJustWantAPictureOfAGodDangHotDog was true, ABORT MISSION");
-			return ListenerResult::Propagate;
+			// log::info("!iJustWantAPictureOfAGodDangHotDog was true, ABORT MISSION");
+			return;
 		}
 		iJustWantAPictureOfAGodDangHotDog->setID(formattedSpriteID);
 
-		const CCSize originalSize = event->getSprite()->getContentSize();
+		const CCSize originalSize = sprite->getContentSize();
 		const CCSize replacementSize = iJustWantAPictureOfAGodDangHotDog->getContentSize();
 		const float yRatio = originalSize.height / replacementSize.height;
 		const float xRatio = originalSize.width / replacementSize.width;
 
 		iJustWantAPictureOfAGodDangHotDog->setScale(std::min(xRatio, yRatio));
-		event->getSprite()->addChildAtPosition(iJustWantAPictureOfAGodDangHotDog, Anchor::Center);
-
-		return ListenerResult::Propagate;
+		if (auto trueSprite = typeinfo_cast<CCSprite*>(sprite)) {
+			trueSprite->setCascadeOpacityEnabled(false);
+			trueSprite->setOpacity(0);
+		}
+		sprite->addChildAtPosition(iJustWantAPictureOfAGodDangHotDog, Anchor::Center);
 	});
+	listener.leak();
 }
 
 /*
