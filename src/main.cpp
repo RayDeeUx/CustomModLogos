@@ -7,16 +7,8 @@ using namespace geode::prelude;
 // #include <regex>
 // const static std::regex modIDLogoPngRegex = std::regex(R"(^([a-z0-9\-_]+\.[a-z0-9\-_]+)\/logo\.png$)");
 
-static std::filesystem::path generateFilePath(const std::string& modID) {
+static std::filesystem::path generateFilePath(const std::string_view modID) {
 	return Mod::get()->getConfigDir() / fmt::format("{}.png", modID);
-}
-
-static std::string toNormalizedString(const std::filesystem::path& path) {
-	#ifdef GEODE_IS_WINDOWS
-	return geode::utils::string::wideToUtf8(path.wstring());
-	#else
-	return path.string();
-	#endif
 }
 
 $on_mod(Loaded) {
@@ -29,13 +21,13 @@ $on_mod(Loaded) {
 	std::filesystem::copy(pngInResourcesDir, pngInConfigDir);
 
 	Mod::get()->setLoggingEnabled(Utils::getBool("logging"));
-	listenForSettingChanges("logging", [](bool newLogging) { Mod::get()->setLoggingEnabled(newLogging); });
+	listenForSettingChanges<bool>("logging", [](bool newLogging) { Mod::get()->setLoggingEnabled(newLogging); });
 }
 // apparently this NEEDS to be in an execute thread (at least for v4.4.0)????? --raydeeux
 $execute {
 	// new EventListener<EventFilter<ModLogoUIEvent>>(+[](ModLogoUIEvent* event) {
 	auto listener = ModLogoUIEvent().listen([](cocos2d::CCNode* sprite, std::string_view modID, std::optional<geode::Mod*> mod) {
-		if (modID || modID == "geode.loader") return;
+		if (modID.empty() || modID == "geode.loader") return;
 		// log::info("a new ModLogoUIEvent posted, LET'S BEGIN.");
 		if (!Utils::modEnabled() || !sprite || !mod.has_value()) return;
 
@@ -53,7 +45,7 @@ $execute {
 			return;
 		}
 
-		CCSprite* iJustWantAPictureOfAGodDangHotDog = CCSprite::create(toNormalizedString(customLogoPath).c_str());
+		CCSprite* iJustWantAPictureOfAGodDangHotDog = CCSprite::create(geode::utils::string::pathToString(customLogoPath).c_str());
 		if (!iJustWantAPictureOfAGodDangHotDog) {
 			// log::info("!iJustWantAPictureOfAGodDangHotDog was true, ABORT MISSION");
 			return;
